@@ -1,22 +1,14 @@
 let w = 20;
-let col;
-let row;
-let board;
-let i = 0;
-let j = 0;
-let sc;
-let sr;
-let ec;
-let er;
+let col,row, board;
+let i = 0, j = 0;
+let sc,sr,ec,er;
 let rq = new Queue();
 let cq = new Queue();
 let dc = [1,-1,0,0]
 let dr = [0,0,1,-1];
-let c,r;
 let isRunning = false;
 let currentMode;
-let parentCol;
-let parentRow;
+let parentCol, parentRow;
 let dragging = 0;
 
 function handleClearWalls() {
@@ -84,8 +76,8 @@ function explore(currentCol,currentRow) {
 }
 
 function bfs() {
-	c = cq.dequeue();
-	r = rq.dequeue();
+	let c = cq.dequeue();
+	let r = rq.dequeue();
 	if(board[c][r] == "e") {
 		cq.empty();
 		rq.empty();
@@ -100,7 +92,6 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     col = floor(width / w);
 	row = floor(height / w);
-	console.log(col,row)
 	sc = floor(random(col))
 	sr = floor(random(row))
 	ec = floor(random(col))
@@ -112,7 +103,9 @@ function setup() {
 		board[i] = new Array(row);
 		parentCol[i] = new Array(row);
 		parentRow[i] = new Array(row);
-    }
+	}
+	
+	// Looping over the entire board and setting the position of the start, end and other nodes
     for (let i = 0; i < col; i++) {
         for (let j = 0; j < row; j++) {
             if (i == sc && j == sr) {
@@ -157,7 +150,6 @@ function mousePressed() {
 	let j = floor(mouseY / w);
 	if(board[i][j] == "s") {
 		dragging = "s";
-		console.log("Set dragging to: " + dragging);
 	} else if(board[i][j] == "e") {
 		dragging="e";
 	}else {
