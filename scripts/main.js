@@ -168,19 +168,31 @@ function mousePressed() {
 	}
 }
 
+function mouseReleased() {
+	let i = floor(mouseX / w);
+	let j = floor(mouseY / w);
+	if(dragging == "s") {
+		let current_sc = sc;
+		let current_sr = sr;
+		sc = i;
+		sr = j;
+		board[i][j] = "s"
+		board[current_sc][current_sr] = 0;
+	} else if(dragging == "e") {
+		let current_ec = ec;
+		let current_er = er;
+		ec = i;
+		er = j;
+		board[i][j] = "e"
+		board[current_ec][current_er] = 0;
+	}
+}
+
 function mouseDragged() {
 	let i = floor(mouseX / w);
 	let j = floor(mouseY / w);
 	
-	if(dragging == "s") {
-		sc = i;
-		sr = j
-		board[i][j] = "s";
-	} else if(dragging == "e") {
-		ec = i;
-		er = j;
-		board[i][j] = "e"
-	} else if(i >= 0 && i <= col-1 && j >=0 && j <= row-1 && board[i][j] != "s" && board[i][j] != "e") {
+ 	if(i >= 0 && i <= col-1 && j >=0 && j <= row-1 && board[i][j] != "s" && board[i][j] != "e" && dragging != "s" && dragging != "e") {
 		board[i][j] = dragging;
 	}
 }
