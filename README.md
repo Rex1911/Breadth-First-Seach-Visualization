@@ -7,7 +7,9 @@ How to use:
   - Click "Start"
   - Enjoy watching how Breadth First Alogrithm finds the shortest path 
   
-# Example GIF: 
+Test the project live at https://rex1911.github.io/breadth-first-search-visualization/
+  
+# Demo GIF: 
 ![Demo GIF](media/working.gif)
 
 PS - The thing looks like its working slow in the GIF cause the video capturing took most of my CPU power
