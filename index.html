@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap" rel="stylesheet">
     <title>Path Finding</title>
 </head>
 <body style="text-align: center">
-    <button style="display: block" onclick="handleStart()">Start</button>
-    <button style="display: block" onclick="handleClear()">Clear</button>
+    <div class="header">
+        <h1>Breadth First Search Visualization</h1>
+        <button id="start" onclick="handleStart()">Start</button>
+        <button id="clearWalls" onclick="handleClearWalls()">Clear Walls</button>
+        <button class="clearPath" onclick="handleClearPath()">Clear Path</button>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
     <script src="./scripts/queue.js"></script>
     <script src="./scripts/main.js"></script>

@@ -4,10 +4,10 @@ let row;
 let board;
 let i = 0;
 let j = 0;
-let sc = 5;
-let sr = 10;
-let ec = 18;
-let er = 13;
+let sc;
+let sr;
+let ec;
+let er;
 let rq = new Queue();
 let cq = new Queue();
 let dc = [1,-1,0,0]
@@ -17,8 +17,19 @@ let isRunning = false;
 let currentMode;
 let parentCol;
 let parentRow;
+let dragging = 0;
 
-function handleClear() {
+function handleClearWalls() {
+	for(let i = 0; i < col; i++) {
+		for(let j = 0; j < row; j++) {
+			if(board[i][j] == -1) {
+				board[i][j] = 0;
+			}
+		}
+	}
+}
+
+function handleClearPath() {
 	for(let i = 0; i < col; i++) {
 		for(let j = 0; j < row; j++) {
 			if(board[i][j] == "v") {
@@ -31,11 +42,13 @@ function handleClear() {
 function handleStart() {
 	cq.enqueue(sc);
 	rq.enqueue(sr);
+	handleClearPath();
 	isRunning = true;
 }
 
+// Trace the path once the target node is found. 
 function tracePath(finalCol, finalRow) {
-	handleClear();
+	handleClearPath();
 	while(true) {
 		let pCol = parentCol[finalCol][finalRow]
 		let pRow = parentRow[finalCol][finalRow]
@@ -54,7 +67,7 @@ function explore(currentCol,currentRow) {
 		
 		// Out of Bounds check
 		if(newCol < 0 || newRow < 0) continue;
-		if(newCol > 24 || newRow > 24) continue;
+		if(newCol > col-1 || newRow > row-1) continue;
 
 		// Blocked, or visited check
 		if(board[newCol][newRow] == -1 || board[newCol][newRow] == "v" || board[newCol][newRow] == "s") continue;
@@ -62,6 +75,7 @@ function explore(currentCol,currentRow) {
 		//Else enqueue the newCol and newRow
 		cq.enqueue(newCol);
 		rq.enqueue(newRow);
+		// Add the parent nodes to trace the path later!
 		parentCol[newCol][newRow] = currentCol;
 		parentRow[newCol][newRow] = currentRow;
 		if(board[newCol][newRow] == "e") continue;
@@ -83,9 +97,14 @@ function bfs() {
 }
 
 function setup() {
-    createCanvas(500, 500);
+    createCanvas(windowWidth, windowHeight);
     col = floor(width / w);
-    row = floor(height / w);
+	row = floor(height / w);
+	console.log(col,row)
+	sc = floor(random(col))
+	sr = floor(random(row))
+	ec = floor(random(col))
+	er = floor(random(row))
 	board = new Array(col);
 	parentCol = new Array(col);	
 	parentRow = new Array(row);
@@ -107,8 +126,6 @@ function setup() {
 			parentRow[i][j] = 0;
         }
 	}
-	cq.enqueue(sc);
-	rq.enqueue(sr);
 }
 
 function draw() {
@@ -138,17 +155,32 @@ function draw() {
 function mousePressed() {
     let i = floor(mouseX / w);
 	let j = floor(mouseY / w);
-	if(board[i][j] == "s" || board[i][j] == "e") return;
-	currentMode = board[i][j] == -1 ? 0 : -1
-	if(i >= 0 && i <= 25 && j >=0 && j <= 25) {
-		board[i][j] = currentMode;
+	if(board[i][j] == "s") {
+		dragging = "s";
+		console.log("Set dragging to: " + dragging);
+	} else if(board[i][j] == "e") {
+		dragging="e";
+	}else {
+		dragging = board[i][j] == -1 ? 0 : -1
+		if(i >= 0 && i <= col-1 && j >=0 && j <= row-1) {
+			board[i][j] = dragging;
+		}
 	}
 }
 
 function mouseDragged() {
 	let i = floor(mouseX / w);
 	let j = floor(mouseY / w);
-	if(i >= 0 && i <= 25 && j >=0 && j <= 25) {
-		board[i][j] = currentMode;
+	
+	if(dragging == "s") {
+		sc = i;
+		sr = j
+		board[i][j] = "s";
+	} else if(dragging == "e") {
+		ec = i;
+		er = j;
+		board[i][j] = "e"
+	} else if(i >= 0 && i <= col-1 && j >=0 && j <= row-1 && board[i][j] != "s" && board[i][j] != "e") {
+		board[i][j] = dragging;
 	}
 }
