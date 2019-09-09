@@ -9,7 +9,9 @@ How to use:
   
 Test the project live at https://rex1911.github.io/breadth-first-search-visualization/
   
-# Demo GIF: 
-![Demo GIF](media/working.gif)
+# Demo GIF:
+The program can create maze's aswell!
+
+![Demo GIF](media/demo.gif)
 
 PS - The thing looks like its working slow in the GIF cause the video capturing took most of my CPU power
