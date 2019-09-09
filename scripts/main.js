@@ -97,9 +97,15 @@ function bfs() {
 }
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+	createCanvas(floor(windowWidth * 0.95), floor(windowHeight * 0.8));
     col = floor(width / w);
 	row = floor(height / w);
+	if(col%2 == 0) {
+		col--;
+	}
+	if(row%2 == 0) {
+		row--;
+	}
 	sc = floor(random(col))
 	sr = floor(random(row))
 	ec = floor(random(col))
@@ -167,6 +173,7 @@ function draw() {
 function mousePressed() {
     let i = floor(mouseX / w);
 	let j = floor(mouseY / w);
+	console.log(i, j)
 	if(board[i][j] == "s") {
 		dragging = "s";
 	} else if(board[i][j] == "e") {
