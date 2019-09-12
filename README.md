@@ -7,7 +7,7 @@ How to use:
   - Click "Start"
   - Enjoy watching how Breadth First Alogrithm finds the shortest path 
   
-Test the project live at https://rex1911.github.io/breadth-first-search-visualization/
+Test the project live at https://rex1911.github.io/Breadth-First-Seach-Visualization/
   
 # Demo GIF:
 The program can create maze's aswell!
