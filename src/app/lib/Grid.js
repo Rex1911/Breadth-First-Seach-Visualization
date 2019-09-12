@@ -18,23 +18,29 @@ export default class Grid {
             this.totalRow--;
         } 
 
-        //Creating the cell array
+        //Creating the cell array and parent cell array
         this.cell = new Array(this.totalCol);
+        this.parentCol = new Array(this.totalCol);
+        this.parentRow = new Array(this.totalCol);
         for(let i = 0; i < this.totalCol; i++) {
             this.cell[i] = new Array(this.totalRow);
+            this.parentCol[i] = new Array(this.totalRow);
+            this.parentRow[i] = new Array(this.totalRow);
         }
 
         //Setting all cells to state 0
         for(let i = 0; i < this.totalCol; i++) {
             for(let j = 0; j < this.totalRow; j++) {
                 this.cell[i][j] = 0;
+                this.parentCol[i][j] = 0;
+                this.parentRow[i][j] = 0;
             }
         }
     }
 
     clearAll = () => {
         for(let i = 0; i < this.totalCol; i++) {
-            for(let j = 0; j < this.totalRow; i++) {
+            for(let j = 0; j < this.totalRow; j++) {
                 if(this.cell[i][j] == "s" || this.cell[i][j] == "e") continue;
                 this.cell[i][j] = 0;
             }
@@ -43,7 +49,7 @@ export default class Grid {
 
     clearWalls = () => {
         for(let i = 0; i < this.totalCol; i++) {
-            for(let j = 0; j < this.totalRow; i++) {
+            for(let j = 0; j < this.totalRow; j++) {
                 if(this.cell[i][j] == -1) {
                     this.cell[i][j] == 0;
                 }
@@ -53,8 +59,8 @@ export default class Grid {
 
     clearPath = () => {
         for(let i = 0; i < this.totalCol; i++) {
-            for(let j = 0; j < this.totalRow; i++) {
-                if(this.cell[i][j] == "v") {
+            for(let j = 0; j < this.totalRow; j++) {
+                if(this.cell[i][j] == "v" || this.cell[i][j] == "q") {
                     this.cell[i][j] = 0;
                 }
             }

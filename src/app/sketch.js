@@ -1,8 +1,20 @@
-import Grid from './lib/Grid'
+import Grid from './lib/Grid';
+import Queue from './lib/Queue';
+import bfs from './lib/bfs';
+import trace from './lib/trace'
+
+let state = {
+    isRunning:false,
+    isTracing:false,
+    currentTraceCol: null,
+    currentTraceRow: null
+}
 
 let grid;
+let colQueue = new Queue();
+let rowQueue = new Queue();
 
-const sketch = (p5) => {
+export default (p5) => {
     p5.setup = () => {
         p5.createCanvas(Math.floor(p5.windowWidth * 0.95), Math.floor(p5.windowHeight * 0.8));
         grid = new Grid(p5.width, p5.height, 20)
@@ -12,10 +24,21 @@ const sketch = (p5) => {
         let endRow = Math.floor(Math.random() * grid.totalRow);
         grid.setStartPos(startCol, startRow);
         grid.setEndPos(endCol,endRow);
+
+        colQueue.enqueue(startCol);
+        rowQueue.enqueue(startRow);
         p5.background(255);
     }
 
     p5.draw = () => {
+        
+        if(state.isRunning) {
+            bfs(colQueue, rowQueue, grid, state);
+        } else if(state.isTracing) {
+            trace(grid,state);
+        }
+        
+        //Drawing the grid
         for(let i = 0; i < grid.totalCol; i++) {
             for(let j = 0; j < grid.totalRow; j++) {
                 p5.stroke(240);
@@ -43,4 +66,6 @@ const sketch = (p5) => {
     }
 }
 
-export default sketch;
+export const startSearch = () => {
+    state.isRunning = true;
+}
