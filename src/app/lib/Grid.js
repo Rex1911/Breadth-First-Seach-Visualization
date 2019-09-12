@@ -41,7 +41,6 @@ export default class Grid {
     clearAll = () => {
         for(let i = 0; i < this.totalCol; i++) {
             for(let j = 0; j < this.totalRow; j++) {
-                if(this.cell[i][j] == "s" || this.cell[i][j] == "e") continue;
                 this.cell[i][j] = 0;
             }
         }

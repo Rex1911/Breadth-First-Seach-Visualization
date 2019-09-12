@@ -2,6 +2,7 @@ import Grid from './lib/Grid';
 import Queue from './lib/Queue';
 import bfs from './lib/bfs';
 import trace from './lib/trace'
+import maze from './lib/Maze';
 
 let state = {
     isRunning:false,
@@ -111,4 +112,8 @@ export const clearWalls = () => {
 
 export const clearPath = () => {
     grid.clearPath();
+}
+
+export const createMazeHelper = () => {
+    maze(grid);
 }
