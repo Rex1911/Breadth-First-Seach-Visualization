@@ -50,8 +50,10 @@ export default class Grid {
     clearWalls = () => {
         for(let i = 0; i < this.totalCol; i++) {
             for(let j = 0; j < this.totalRow; j++) {
+                if(this.cell[i][j] == "s" || this.cell[i][j] == "e") continue;
+                
                 if(this.cell[i][j] == -1) {
-                    this.cell[i][j] == 0;
+                    this.cell[i][j] = 0;
                 }
             }
         }
@@ -60,6 +62,8 @@ export default class Grid {
     clearPath = () => {
         for(let i = 0; i < this.totalCol; i++) {
             for(let j = 0; j < this.totalRow; j++) {
+                if(this.cell[i][j] == "s" || this.cell[i][j] == "e") continue;
+                
                 if(this.cell[i][j] == "v" || this.cell[i][j] == "q") {
                     this.cell[i][j] = 0;
                 }
@@ -68,14 +72,14 @@ export default class Grid {
     }
 
     setStartPos = (col, row) => {
-        if(this.startCol != null) cell[this.startCol][this.startRow] = 0;
+        if(this.startCol != null) this.cell[this.startCol][this.startRow] = 0;
         this.startCol = col;
         this.startRow = row;
         this.cell[this.startCol][this.startRow] = "s";
     }
 
     setEndPos = (col, row) => {
-        if(this.endCol != null) cell[this.endCol][this.endRow] = 0;
+        if(this.endCol != null) this.cell[this.endCol][this.endRow] = 0;
         this.endCol = col;
         this.endRow = row;
         this.cell[this.endCol][this.endRow] = "e";

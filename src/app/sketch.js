@@ -7,7 +7,8 @@ let state = {
     isRunning:false,
     isTracing:false,
     currentTraceCol: null,
-    currentTraceRow: null
+    currentTraceRow: null,
+    dragging: null
 }
 
 let grid;
@@ -25,8 +26,6 @@ export default (p5) => {
         grid.setStartPos(startCol, startRow);
         grid.setEndPos(endCol,endRow);
 
-        colQueue.enqueue(startCol);
-        rowQueue.enqueue(startRow);
         p5.background(255);
     }
 
@@ -64,8 +63,52 @@ export default (p5) => {
             }
         }
     }
+
+    p5.mousePressed = () => {
+        let i = Math.floor(p5.mouseX / grid.cellDimension);
+        let j = Math.floor(p5.mouseY / grid.cellDimension);
+        if(grid.cell[i][j] == "s") {
+            state.dragging = "s";
+        } else if(grid.cell[i][j] == "e") {
+            state.dragging="e";
+        }else {
+            state.dragging = grid.cell[i][j] == -1 ? 0 : -1
+            if(i >= 0 && i <= grid.totalCol-1 && j >=0 && j <= grid.totalRow-1) {
+                grid.cell[i][j] = state.dragging;
+            }
+        }
+    }
+
+    p5.mouseDragged = () => {
+        let j = Math.floor(p5.mouseY / grid.cellDimension);
+        let i = Math.floor(p5.mouseX / grid.cellDimension);
+        
+        if(i >= 0 && i <= grid.totalCol-1 && j >=0 && j <= grid.totalRow-1 && grid.cell[i][j] != "s" && grid.cell[i][j] != "e" && state.dragging == -1 || state.dragging == 0) {
+            grid.cell[i][j] = state.dragging;
+        }
+    }
+
+    p5.mouseReleased = () => {
+        let i = Math.floor(p5.mouseX / grid.cellDimension);
+        let j = Math.floor(p5.mouseY / grid.cellDimension);
+        if(state.dragging == "s") {
+            grid.setStartPos(i,j)
+        } else if(state.dragging == "e") {
+            grid.setEndPos(i,j)
+        }
+    }
 }
 
 export const startSearch = () => {
+    colQueue.enqueue(grid.startCol);
+    rowQueue.enqueue(grid.startRow);
     state.isRunning = true;
+}
+
+export const clearWalls = () => {
+    grid.clearWalls();
+}
+
+export const clearPath = () => {
+    grid.clearPath();
 }
