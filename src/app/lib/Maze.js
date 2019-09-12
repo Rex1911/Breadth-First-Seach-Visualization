@@ -1,5 +1,5 @@
-function getOddRandom(start, end) {
-    let num = floor(random(start,end))
+const getOddRandom = (start, end) => {
+    let num = Math.floor(Math.random() * (end-start) + start) 
     if(num%2 == 0) {
         if(num + 1 >= end) {
             num--;
@@ -10,46 +10,41 @@ function getOddRandom(start, end) {
     return num
 }
 
-function mazeSetup() {
-    //Clearing the board
-    for(let i = 0; i < col; i++) {
-        for(let j = 0; j < row; j++) {
-            board[i][j] = 0
-        }
-    }
+const mazeSetup = (grid) => {
+    grid.clearAll()
     
-    //Bordering the edge of the board
-    for(let i = 0; i < col; i++) {
-        board[i][0] = -1;
-        board[i][row-1] = -1;
+    //Bordering the edge of the grid
+    for(let i = 0; i < grid.totalCol; i++) {
+        grid.cell[i][0] = -1;
+        grid.cell[i][grid.totalRow-1] = -1;
     }
-    for(let j = 0; j < row; j++) {
-        board[0][j] = -1;
-        board[col-1][j] = -1;
+    for(let j = 0; j < grid.totalRow; j++) {
+        grid.cell[0][j] = -1;
+        grid.cell[grid.totalCol-1][j] = -1;
     }
 
     //Making even cols and rows as walls
-    for(let i = 2; i < col-1; i += 2) {
-        for(let j = 1; j < row-1; j ++) {
-            board[i][j] = -1;
+    for(let i = 2; i < grid.totalCol-1; i += 2) {
+        for(let j = 1; j < grid.totalRow-1; j ++) {
+            grid.cell[i][j] = -1;
         }
     }
-    for(let i = 2; i < row-1; i += 2) {
-        for(let j = 1; j < col-1; j ++) {
-            board[j][i] = -1;
+    for(let i = 2; i < grid.totalRow-1; i += 2) {
+        for(let j = 1; j < grid.totalCol-1; j ++) {
+            grid.cell[j][i] = -1;
         }
     }
 }
 
-function shuffleArray(array) {
+const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
-function generate(currentCol, currentRow) {
-    board[currentCol][currentRow] = "v"
+const generate = (currentCol, currentRow, grid) => {
+    grid.cell[currentCol][currentRow] = "v"
     let directions = ["N", "S", "E", "W"];
     shuffleArray(directions)
     for(let i = 0; i < directions.length; i++) {
@@ -90,27 +85,23 @@ function generate(currentCol, currentRow) {
 
         // Checking Out of Bounds
         if(nextCellCol <= 0 || nextCellRow <= 0) continue;
-        if(nextCellCol >= col-1 || nextCellRow >= row-1) continue;
+        if(nextCellCol >= grid.totalCol-1 || nextCellRow >= grid.totalRow-1) continue;
 
         //Checking if visited already
-        if(board[nextCellCol][nextCellRow] == "v") continue;
+        if(grid.cell[nextCellCol][nextCellRow] == "v") continue;
 
-        board[nextWallCol][nextWallRow] = 0;
-        generate(nextCellCol, nextCellRow);
+        grid.cell[nextWallCol][nextWallRow] = 0;
+        generate(nextCellCol, nextCellRow, grid);
     }
 }
 
-function createMazeHelper() {
-    mazeSetup()
-    let randCol = getOddRandom(1, col-1);
-    let randRow = getOddRandom(1,row-1);
-    generate(randCol,randRow);
-    handleClearPath();
+export default (grid) => {
+    mazeSetup(grid)
+    let randCol = getOddRandom(1, grid.totalCol-1);
+    let randRow = getOddRandom(1,grid.totalRow-1);
+    generate(randCol,randRow, grid);
+    grid.clearPath()
     //Setting the start and end points 
-    sc = randCol;
-    sr = randRow;
-    board[sc][sr] = "s"
-    ec = getOddRandom(1,col-1);
-    er = getOddRandom(1,row-1);
-    board[ec][er] = "e";
+    grid.setStartPos(getOddRandom(1, grid.totalCol-1), getOddRandom(1, grid.totalRow-1))
+    grid.setEndPos(getOddRandom(1, grid.totalCol-1),getOddRandom(1, grid.totalRow-1))
 }
